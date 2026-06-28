@@ -194,7 +194,7 @@ grid.appendChild(el);
 });
 
 const firstDay = new Date(m.year, m.month, 1);
-const startDow = firstDay.getDay() + 6) % 7;
+const startDow = (firstDay.getDay() + 6) % 7;
 const daysInMonth = new Date(m.year, m.month + 1, 0).getDate();
 
 for (let i = 0; i < startDow; i++) {
