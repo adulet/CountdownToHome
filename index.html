@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cat mai e pana plec acasa!</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+font-family: 'Segoe UI', Tahoma, sans-serif;
+background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+color: #fff;
+min-height: 100vh;
+padding: 30px 20px;
+}
+h1 {
+text-align: center;
+font-size: 2.4em;
+margin-bottom: 20px;
+text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+}
+.countdown {
+display: flex;
+justify-content: center;
+gap: 20px;
+flex-wrap: wrap;
+margin-bottom: 40px;
+}
+.time-box {
+background: rgba(255,255,255,0.15);
+backdrop-filter: blur(10px);
+border-radius: 12px;
+padding: 20px 30px;
+min-width: 110px;
+text-align: center;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.time-box .num {
+font-size: 3em;
+font-weight: bold;
+display: block;
+}
+.time-box .label {
+font-size: 0.9em;
+text-transform: uppercase;
+letter-spacing: 2px;
+opacity: 0.85;
+}
+.calendars {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 25px;
+max-width: 1400px;
+margin: 0 auto;
+}
+.calendar {
+background: rgba(255,255,255,0.12);
+border-radius: 12px;
+padding: 20px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.calendar h2 {
+text-align: center;
+margin-bottom: 15px;
+font-size: 1.4em;
+}
+.cal-grid {
+display: grid;
+grid-template-columns: repeat(7, 1fr);
+gap: 4px;
+}
+.cal-grid .dow {
+font-weight: bold;
+text-align: center;
+padding: 6px 0;
+font-size: 0.8em;
+opacity: 0.7;
+}
+.day {
+aspect-ratio: 1 / 1;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(255,255,255,0.1);
+border-radius: 6px;
+font-size: 0.95em;
+position: relative;
+}
+.day.empty { background: transparent; }
+.day.before-start { opacity: 0.3; }
+.day.passed {
+background: rgba(0,0,0,0.35);
+color: rgba(255,255,255,0.5);
+}
+.day.passed::after {
+content: "✕";
+position: absolute;
+font-size: 1.8em;
+color: #ff5252;
+font-weight: bold;
+text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+.day.today {
+background: #ffca28;
+color: #000;
+font-weight: bold;
+box-shadow: 0 0 12px #ffca28;
+}
+.day.target {
+background: #4caf50;
+color: #fff;
+font-weight: bold;
+box-shadow: 0 0 12px #4caf50;
+}
+footer {
+text-align: center;
+margin-top: 40px;
+opacity: 0.7;
+font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+
+<h1>Cat mai e pana plec acasa!</h1>
+
+<div class="countdown" id="countdown">
+<div class="time-box"><span class="num" id="days">0</span><span class="label">Zile</span></div>
+<div class="time-box"><span class="num" id="hours">0</span><span class="label">Ore</span></div>
+<div class="time-box"><span class="num" id="minutes">0</span><span class="label">Minute</span></div>
+<div class="time-box"><span class="num" id="seconds">0</span><span class="label">Secunde</span></div>
+</div>
+
+<div class="calendars" id="calendars"></div>
+
+<footer>Sa vezi ce dusmanie ii dau pe PS5!</footer>
+
+<script>
+const TARGET = new Date(2026, 7, 30, 0, 0, 0); // Aug 30 2026
+const START = new Date(2026, 4, 22, 0, 0, 0); // May 22 2026
+
+// ----- Countdown -----
+function updateCountdown() {
+const now = new Date();
+let diff = TARGET - now;
+if (diff < 0) diff = 0;
+const d = Math.floor(diff / (1000*60*60*24));
+const h = Math.floor((diff / (1000*60*60)) % 24);
+const m = Math.floor((diff / (1000*60)) % 60);
+const s = Math.floor((diff / 1000) % 60);
+document.getElementById('days').textContent = d;
+document.getElementById('hours').textContent = h;
+document.getElementById('minutes').textContent = m;
+document.getElementById('seconds').textContent = s;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ----- Calendars -----
+const months = [
+{ name: 'May 2026', year: 2026, month: 4 },
+{ name: 'June 2026', year: 2026, month: 5 },
+{ name: 'July 2026', year: 2026, month: 6 },
+{ name: 'August 2026', year: 2026, month: 7 }
+];
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function sameDay(a, b) {
+return a.getFullYear() === b.getFullYear()
+&& a.getMonth() === b.getMonth()
+&& a.getDate() === b.getDate();
+}
+
+function buildCalendars() {
+const today = new Date();
+today.setHours(0,0,0,0);
+const container = document.getElementById('calendars');
+container.innerHTML = '';
+
+months.forEach(m => {
+const cal = document.createElement('div');
+cal.className = 'calendar';
+const title = document.createElement('h2');
+title.textContent = m.name;
+cal.appendChild(title);
+
+const grid = document.createElement('div');
+grid.className = 'cal-grid';
+
+DOW.forEach(d => {
+const el = document.createElement('div');
+el.className = 'dow';
+el.textContent = d;
+grid.appendChild(el);
+});
+
+const firstDay = new Date(m.year, m.month, 1);
+const startDow = firstDay.getDay();
+const daysInMonth = new Date(m.year, m.month + 1, 0).getDate();
+
+for (let i = 0; i < startDow; i++) {
+const e = document.createElement('div');
+e.className = 'day empty';
+grid.appendChild(e);
+}
+
+for (let day = 1; day <= daysInMonth; day++) {
+const cell = document.createElement('div');
+cell.className = 'day';
+cell.textContent = day;
+const date = new Date(m.year, m.month, day);
+
+if (date < START) {
+cell.classList.add('before-start');
+} else if (sameDay(date, TARGET)) {
+cell.classList.add('target');
+} else if (sameDay(date, today)) {
+cell.classList.add('today');
+} else if (date < today && date >= START) {
+cell.classList.add('passed');
+}
+grid.appendChild(cell);
+}
+cal.appendChild(grid);
+container.appendChild(cal);
+});
+}
+
+buildCalendars();
+// Rebuild at midnight to keep "today" / "passed" accurate
+setInterval(buildCalendars, 60 * 60 * 1000);
+</script>
+
+</body>
+</html>
