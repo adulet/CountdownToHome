@@ -6,154 +6,251 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body  {
-font-family: 'Segoe UI', Tahoma, sans-serif;
-background: linear-gradient(180deg, #181f33 0%, #fbd83b 100%);
-color: #fff;
-min-height: 100vh;
-padding: 30px 20px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(180deg, #181f33 0%, #fbd83b 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding: 30px 20px;
 }
 h1 {
-text-align: center;
-font-size: 2.4em;
-margin-bottom: 20px;
-text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    text-align: center;
+    font-size: 2.4em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
 }
-.countdown {
-display: flex;
-justify-content: center;
-gap: 20px;
-flex-wrap: wrap;
-margin-bottom: 40px;
+
+/* ---------- FLIP CLOCK STYLES ---------- */
+.flip-countdown {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin: 30px 0 50px;
 }
-.time-box {
-background: rgba(255,255,255,0,15);
-backdrop-filter: blur(10px);
-border-radius: 12px;
-padding: 20px 30px;
-min-width: 110px;
-text-align: center;
-box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.flip-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
-.time-box .num {
-font-size: 3em;
-font-weight: bold;
-display: block;
-color: #fbd83b;
+.flip-digits {
+    display: flex;
+    gap: 6px;
 }
-.time-box .label {
-font-size: 0.9em;
-text-transform: uppercase;
-letter-spacing: 2px;
-opacity: 0.85;
-color: #fbd83b;
-font-family: 'wolfsbane2';
+.flip-card {
+    position: relative;
+    width: 70px;
+    height: 100px;
+    perspective: 400px;
+    background: #111;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45),
+                inset 0 0 0 1px rgba(255,255,255,0.05);
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
 }
+.flip-card::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(0,0,0,0.85);
+    z-index: 5;
+    transform: translateY(-1px);
+}
+.flip-card .top,
+.flip-card .bottom,
+.flip-card .flip-top,
+.flip-card .flip-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+    color: #fbd83b;
+    font-size: 4em;
+    font-weight: bold;
+    line-height: 1;
+}
+.flip-card .top,
+.flip-card .flip-top {
+    top: 0;
+    align-items: flex-end;
+    border-bottom: 1px solid rgba(0,0,0,0.6);
+    background: linear-gradient(180deg, #2e2e2e, #222);
+}
+.flip-card .bottom,
+.flip-card .flip-bottom {
+    bottom: 0;
+    align-items: flex-start;
+    background: linear-gradient(180deg, #1a1a1a, #0d0d0d);
+}
+.flip-card .top span,
+.flip-card .flip-top span {
+    transform: translateY(50%);
+}
+.flip-card .bottom span,
+.flip-card .flip-bottom span {
+    transform: translateY(-50%);
+}
+.flip-card .flip-top {
+    z-index: 3;
+    transform-origin: bottom;
+    backface-visibility: hidden;
+}
+.flip-card .flip-bottom {
+    z-index: 3;
+    transform-origin: top;
+    backface-visibility: hidden;
+    transform: rotateX(90deg);
+}
+.flip-card.flipping .flip-top {
+    animation: flipTop 0.6s ease-in forwards;
+}
+.flip-card.flipping .flip-bottom {
+    animation: flipBottom 0.6s ease-out 0.3s forwards;
+}
+@keyframes flipTop {
+    0%   { transform: rotateX(0deg); }
+    100% { transform: rotateX(-90deg); }
+}
+@keyframes flipBottom {
+    0%   { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+}
+.flip-label {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #fbd83b;
+    font-family: 'wolfsbane2';
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ---------- CALENDAR STYLES (unchanged) ---------- */
 .calendars {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-gap: 25px;
-max-width: 1400px;
-margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 .calendar {
-background: rgba(255,255,255,0.12);
-border-radius: 12px;
-padding: 20px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 .calendar h2 {
-text-align: center;
-margin-bottom: 15px;
-font-size: 1.4em;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.4em;
 }
 .cal-grid {
-display: grid;
-grid-template-columns: repeat(7, 1fr);
-gap: 4px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
 }
 .cal-grid .dow {
-font-weight: bold;
-text-align: center;
-padding: 6px 0;
-font-size: 0.8em;
-opacity: 0.7;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 0.8em;
+    opacity: 0.7;
 }
 .day {
-aspect-ratio: 1 / 1;
-display: flex;
-align-items: center;
-justify-content: center;
-background: rgba(255,255,255,0.1);
-border-radius: 6px;
-font-size: 0.95em;
-position: relative;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    font-size: 0.95em;
+    position: relative;
 }
 .day.empty { background: transparent; }
 .day.before-start { opacity: 0.3; }
 .day.passed {
-background: rgba(0,0,0,0.35);
-color: rgba(255,255,255,0.5);
+    background: rgba(0,0,0,0.35);
+    color: rgba(255,255,255,0.5);
 }
 .day.passed::after {
-content: "✕";
-position: absolute;
-font-size: 1.8em;
-color: #fbd83b;
-font-weight: bold;
-text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    content: "✕";
+    position: absolute;
+    font-size: 1.8em;
+    color: #fbd83b;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
 }
 .day.today {
-background: #ffca28;
-color: #000;
-font-weight: bold;
-box-shadow: 0 0 12px #ffca28;
+    background: #ffca28;
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 12px #ffca28;
 }
 .day.target {
-background: #4caf50;
-color: #fff;
-font-weight: bold;
-box-shadow: 0 0 12px #4caf50;
+    background: #4caf50;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 12px #4caf50;
 }
 footer {
-text-align: center;
-margin-top: 40px;
-opacity: 0.8;
-font-size: 0.9em;
-font-family: 'wolfsbane2';
-color: #181f33;
+    text-align: center;
+    margin-top: 40px;
+    opacity: 0.8;
+    font-size: 0.9em;
+    font-family: 'wolfsbane2';
+    color: #181f33;
 }
 .image-container {
-  text-align: center;
-  margin: 30px 0;
+    text-align: center;
+    margin: 30px 0;
 }
-
 .image-container img {
     max-width: 100%;
     width: 1000px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-}
-    @font-face {
+
+@font-face {
     font-family: 'Avengeance';
     src: url('Avengeance.ttf') format('truetype');
 }
-    @font-face {
+@font-face {
     font-family: 'wolfsbane2';
     src: url('wolfsbane2.ttf') format('truetype');
 }
-
 </style>
 </head>
 <body>
 
 <h1> </h1>
 
-<div class="countdown" id="countdown">
-<div class="time-box"><span class="num" id="days">0</span><span class="label">Zile</span></div>
-<div class="time-box"><span class="num" id="hours">0</span><span class="label">Ore</span></div>
-<div class="time-box"><span class="num" id="minutes">0</span><span class="label">Minute</span></div>
-<div class="time-box"><span class="num" id="seconds">0</span><span class="label">Secunde</span></div>
+<!-- FLIP CLOCK COUNTDOWN -->
+<div class="flip-countdown" id="countdown">
+    <div class="flip-unit">
+        <div class="flip-digits" data-unit="days"></div>
+        <div class="flip-label">Zile</div>
+    </div>
+    <div class="flip-unit">
+        <div class="flip-digits" data-unit="hours"></div>
+        <div class="flip-label">Ore</div>
+    </div>
+    <div class="flip-unit">
+        <div class="flip-digits" data-unit="minutes"></div>
+        <div class="flip-label">Minute</div>
+    </div>
+    <div class="flip-unit">
+        <div class="flip-digits" data-unit="seconds"></div>
+        <div class="flip-label">Secunde</div>
+    </div>
 </div>
 
 <div class="calendars" id="calendars"></div>
@@ -161,98 +258,176 @@ color: #181f33;
 <div class="image-container">
     <img src="https://4kwallpapers.com/images/walls/thumbs_2t/24132.jpg" alt="Wolverine">
 </div>
-  
+
 <footer>Copyright © 2003 - 2026 WalkthroughGames. All Rights Reserved.</footer>
 
 <script>
 const TARGET = new Date(2026, 7, 30, 0, 0, 0); // Aug 30 2026
-const START = new Date(2026, 4, 22, 0, 0, 0); // May 22 2026
+const START  = new Date(2026, 4, 22, 0, 0, 0); // May 22 2026
+
+// ----- Flip Clock helpers -----
+function createCard(initial) {
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = `
+        <div class="top"><span>${initial}</span></div>
+        <div class="bottom"><span>${initial}</span></div>
+        <div class="flip-top"><span>${initial}</span></div>
+        <div class="flip-bottom"><span>${initial}</span></div>
+    `;
+    card.dataset.value = initial;
+    return card;
+}
+
+function ensureDigits(container, count) {
+    while (container.children.length < count) {
+        container.appendChild(createCard('0'));
+    }
+    while (container.children.length > count) {
+        container.removeChild(container.lastChild);
+    }
+}
+
+function setCard(card, newVal) {
+    const oldVal = card.dataset.value;
+    if (oldVal === newVal) return;
+
+    const top       = card.querySelector('.top span');
+    const bottom    = card.querySelector('.bottom span');
+    const flipTop   = card.querySelector('.flip-top span');
+    const flipBot   = card.querySelector('.flip-bottom span');
+
+    // Prepare animation: flip-top shows OLD value flipping away,
+    // flip-bottom shows NEW value flipping in. Static bottom keeps old until anim ends.
+    flipTop.textContent = oldVal;
+    flipBot.textContent = newVal;
+    top.textContent     = newVal; // top static immediately shows new (hidden behind flip-top)
+
+    card.classList.remove('flipping');
+    // Force reflow so animation restarts cleanly
+    void card.offsetWidth;
+    card.classList.add('flipping');
+
+    const onEnd = () => {
+        bottom.textContent = newVal;
+        card.classList.remove('flipping');
+        card.dataset.value = newVal;
+        card.removeEventListener('animationend', onEnd);
+    };
+    card.addEventListener('animationend', onEnd);
+}
+
+function updateUnit(unitName, value, minDigits) {
+    const container = document.querySelector(`[data-unit="${unitName}"]`);
+    const str = String(value).padStart(minDigits, '0');
+    ensureDigits(container, Math.max(minDigits, str.length));
+    // If value got bigger (more digits), re-pad
+    const finalStr = String(value).padStart(container.children.length, '0');
+    for (let i = 0; i < finalStr.length; i++) {
+        setCard(container.children[i], finalStr[i]);
+    }
+}
 
 // ----- Countdown -----
 function updateCountdown() {
-const now = new Date();
-let diff = TARGET - now;
-if (diff < 0) diff = 0;
-const d = Math.floor(diff / (1000*60*60*24));
-const h = Math.floor((diff / (1000*60*60)) % 24);
-const m = Math.floor((diff / (1000*60)) % 60);
-const s = Math.floor((diff / 1000) % 60);
-document.getElementById('days').textContent = d;
-document.getElementById('hours').textContent = h;
-document.getElementById('minutes').textContent = m;
-document.getElementById('seconds').textContent = s;
+    const now = new Date();
+    let diff = TARGET - now;
+    if (diff < 0) diff = 0;
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff / (1000*60*60)) % 24);
+    const m = Math.floor((diff / (1000*60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    updateUnit('days',    d, 3);
+    updateUnit('hours',   h, 2);
+    updateUnit('minutes', m, 2);
+
+// ----- Countdown -----
+function updateCountdown() {
+    const now = new Date();
+    let diff = TARGET - now;
+    if (diff < 0) diff = 0;
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff / (1000*60*60)) % 24);
+    const m = Math.floor((diff / (1000*60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    updateUnit('days',    d, 3);
+    updateUnit('hours',   h, 2);
+    updateUnit('minutes', m, 2);
+    updateUnit('seconds', s, 2);
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
 // ----- Calendars -----
 const months = [
-{ name: 'MAI', year: 2026, month: 4 },
-{ name: 'IUNIE', year: 2026, month: 5 },
-{ name: 'IULIE', year: 2026, month: 6 },
-{ name: 'AUGUST', year: 2026, month: 7 }
+    { name: 'MAI',    year: 2026, month: 4 },
+    { name: 'IUNIE',  year: 2026, month: 5 },
+    { name: 'IULIE',  year: 2026, month: 6 },
+    { name: 'AUGUST', year: 2026, month: 7 }
 ];
 const DOW = ['Lun','Mar','Mie','Joi','Vin','Sam','Dum'];
 
 function sameDay(a, b) {
-return a.getFullYear() === b.getFullYear()
-&& a.getMonth() === b.getMonth()
-&& a.getDate() === b.getDate();
+    return a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
 }
 
 function buildCalendars() {
-const today = new Date();
-today.setHours(0,0,0,0);
-const container = document.getElementById('calendars');
-container.innerHTML = '';
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const container = document.getElementById('calendars');
+    container.innerHTML = '';
 
-months.forEach(m => {
-const cal = document.createElement('div');
-cal.className = 'calendar';
-const title = document.createElement('h2');
-title.textContent = m.name;
-cal.appendChild(title);
+    months.forEach(m => {
+        const cal = document.createElement('div');
+        cal.className = 'calendar';
+        const title = document.createElement('h2');
+        title.textContent = m.name;
+        cal.appendChild(title);
 
-const grid = document.createElement('div');
-grid.className = 'cal-grid';
+        const grid = document.createElement('div');
+        grid.className = 'cal-grid';
 
-DOW.forEach(d => {
-const el = document.createElement('div');
-el.className = 'dow';
-el.textContent = d;
-grid.appendChild(el);
-});
+        DOW.forEach(d => {
+            const el = document.createElement('div');
+            el.className = 'dow';
+            el.textContent = d;
+            grid.appendChild(el);
+        });
 
-const firstDay = new Date(m.year, m.month, 1);
-const startDow = (firstDay.getDay() + 6) % 7;
-const daysInMonth = new Date(m.year, m.month + 1, 0).getDate();
+        const firstDay = new Date(m.year, m.month, 1);
+        const startDow = (firstDay.getDay() + 6) % 7;
+        const daysInMonth = new Date(m.year, m.month + 1, 0).getDate();
 
-for (let i = 0; i < startDow; i++) {
-const e = document.createElement('div');
-e.className = 'day empty';
-grid.appendChild(e);
-}
+        for (let i = 0; i < startDow; i++) {
+            const e = document.createElement('div');
+            e.className = 'day empty';
+            grid.appendChild(e);
+        }
 
-for (let day = 1; day <= daysInMonth; day++) {
-const cell = document.createElement('div');
-cell.className = 'day';
-cell.textContent = day;
-const date = new Date(m.year, m.month, day);
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cell = document.createElement('div');
+            cell.className = 'day';
+            cell.textContent = day;
+            const date = new Date(m.year, m.month, day);
 
-if (date < START) {
-cell.classList.add('before-start');
-} else if (sameDay(date, TARGET)) {
-cell.classList.add('target');
-} else if (sameDay(date, today)) {
-cell.classList.add('today');
-} else if (date < today && date >= START) {
-cell.classList.add('passed');
-}
-grid.appendChild(cell);
-}
-cal.appendChild(grid);
-container.appendChild(cal);
-});
+            if (date < START) {
+                cell.classList.add('before-start');
+            } else if (sameDay(date, TARGET)) {
+                cell.classList.add('target');
+            } else if (sameDay(date, today)) {
+                cell.classList.add('today');
+            } else if (date < today && date >= START) {
+                cell.classList.add('passed');
+            }
+            grid.appendChild(cell);
+        }
+        cal.appendChild(grid);
+        container.appendChild(cal);
+    });
 }
 
 buildCalendars();
